@@ -174,7 +174,7 @@ const withSession = () => {
 const withOutSession = () => {
     console.log('No tenemos session guardada');
     console.log([
-        '🙌 El core de whatsapp se esta actualizando',
+        '🙌 El core de whatsapp se esta actualizando */*/*/*/*/**/* 555559797 979 77 9 222222',
         '🙌 para proximamente dar paso al multi-device',
         '🙌 falta poco si quieres estar al pendiente unete',
         '🙌 http://t.me/leifermendez',
