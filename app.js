@@ -249,3 +249,107 @@ server.listen(port, () => {
 })
 
 
+
+
+
+
+
+const country_code = "51";
+
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./alimentacion-beta-firebase-adminsdk-s7obu-c99ae1e58f.json");
+
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+
+
+
+
+const db = admin.firestore();
+
+date = new Date();
+fecha_actual = String(date.getDate()).padStart(2, '0') + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getFullYear();
+
+
+
+
+const query = db.collection('Reservaciones/' + fecha_actual + "/almuerzo")
+
+client.on('ready',() =>{
+    query.onSnapshot(querySnapshot => {
+        querySnapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            reservar_almuerzo(change.doc.data())
+            
+          }
+          if (change.type === 'modified') {
+           
+          }
+          if (change.type === 'removed') {
+            cancelar_reservacion(change.doc.data())
+          
+          }
+        });
+      });
+})
+
+
+
+ var array_espera = [];
+  var array_espera_2 = [];
+
+  
+  function reservar_almuerzo(trabajador)
+  {
+    array_espera_2.push(trabajador);
+        
+        setTimeout( function () {
+
+            var mensaje = '✔️ Buenos dias ' + array_espera_2[0].any.any.nombres_apellidos +  ' se acaba de reservar un almuerzo a su nombre ✔️'
+            let chatID = country_code + array_espera_2[0].any.any.numero_telf + "@c.us"
+
+            client.sendMessage(chatID,mensaje)
+                    .then(response =>{
+                        if (response.id.fromMe) {
+                           
+                        }
+                    })
+                    
+                    var newArray = array_espera_2.filter((item) => item.any.any.dni  !== array_espera_2[0].any.any.dni );
+                    array_espera_2 = newArray
+                   
+                }
+            
+            ,30000);
+  }
+
+
+
+  function cancelar_reservacion(trabajador)
+  {
+    array_espera.push(trabajador);
+        
+        setTimeout( function () {
+            var mensaje = '❌ Buenos dias ' + array_espera[0].any.any.nombres_apellidos +  'se acaba de cancelar su reservacion  ❌' 
+
+            let chatID = country_code + array_espera[0].any.any.numero_telf + "@c.us";
+
+            client.sendMessage(chatID,mensaje)
+                    .then(response =>{
+                        if (response.id.fromMe) {
+                          
+                        }
+                    }) 
+                
+                    var newArray = array_espera.filter((item) => item.any.any.dni  !== array_espera[0].any.any.dni );
+                    array_espera = newArray
+                  
+                }
+            ,30000);   
+  }
+
